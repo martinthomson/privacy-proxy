@@ -1871,7 +1871,7 @@ of the Origin that issued the token challenge. One or more names can be listed
 in the TokenChallenge.origin_info field. Rate-limited token issuance relies on the
 client selecting a single origin name from this list if multiple are present.<a href="#section-5.1.1-2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.1.1-2.2">Token Key, a blind signature public key for the Origin that is owned by the
+            <li class="normal" id="section-5.1.1-2.2">Token Key, a blind signature public key specific to the Origin. This key is owned by the
 Issuer identified by the TokenChallenge.issuer_name.<a href="#section-5.1.1-2.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-5.1.1-2.3">Issuer Encapsulation Key, a public key used to encrypt request information corresponding
