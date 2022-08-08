@@ -2048,15 +2048,14 @@ blinded_msg, blind_inv = rsabssa_blind(pkI, token_input)
 </div>
 <p id="section-5.3-8">The Client then uses Client Key to generate its one-time-use request public
 key <code>request_key</code> and blind <code>request_blind</code> as described in <a href="#client-anon-issuer-origin-id" class="xref">Section 7.1</a>.<a href="#section-5.3-8" class="pilcrow">¶</a></p>
-<p id="section-5.3-9">The Client then computes <code>token_key_id</code> as the least significant byte of the Token Key
-ID, where the Token Key ID is generated as SHA256(public_key) and public_key is a DER-encoded
+<p id="section-5.3-9">The Client then computes <code>token_key_id</code> as SHA256(public_key), where public_key is a DER-encoded
 SubjectPublicKeyInfo object carrying Token Key. The Client then constructs a InnerTokenRequest
 value, denoted <code>origin_token_request</code>, combining <code>token_key_id</code>, <code>blinded_msg</code>, and a padded
 representation of the origin name as follows:<a href="#section-5.3-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-10">
 <pre>
 struct {
-  uint8_t token_key_id;
+  uint8_t token_key_id[32];
   uint8_t blinded_msg[Nk];
   uint8_t padded_origin_name&lt;0..2^16-1&gt;;
 } InnerTokenRequest;
@@ -2190,10 +2189,10 @@ policy if supported. If a cross-origin policy is not supported, this condition i
 <p id="section-5.4-6">If any of these conditions is not met, the Issuer MUST return an HTTP 400 error to the Attester,
 which will forward the error to the client.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
 <p id="section-5.4-7">The Issuer determines the correct Issuer Key by using the decrypted Origin Name and
-InnerTokenRequest.token_key_id values. If there is no Token Key whose truncated key ID matches
-InnerTokenRequest.token_key_id, the Issuer MUST return an HTTP 401 error to Attester, which will
-forward the error to the client. The Attester learns that the client's view of the Origin key
-was invalid in the process.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
+InnerTokenRequest.token_key_id values. If there is no Token Key whose key ID matches
+InnerTokenRequest.token_key_id and whose Origin matches the Origin Name, the Issuer
+MUST return an HTTP 401 error to the Attester, which will forward the error to the
+client. The Attester learns that the client's view of the Origin key was invalid in the process.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="response-one">
@@ -2554,7 +2553,7 @@ request_blind = BKS-SerializePrivatekey(sk_blind)
           </h4>
 <p id="section-7.1.2-1">Clients produce a signature of their request by signing its entire contents
 consisting of the following values defined in <a href="#request-one" class="xref">Section 5.3</a>:
-<code>token_key_id</code>, <code>blinded_msg</code>, <code>request_key</code>, <code>issuer_encap_key_id</code>, and <code>encrypted_token_request</code>.
+<code>request_key</code>, <code>blinded_msg</code>, <code>issuer_encap_key_id</code>, and <code>encrypted_token_request</code>.
 This process requires the blind value <code>sk_blind</code> produced during the <a href="#index-request" class="xref">Section 7.1.1</a> process.
 As above, let pk and sk denote Client Key and Client Secret, respectively. Given these
 values, this signature process works as follows:<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
@@ -2571,7 +2570,7 @@ Client Secret, <code>sk_sign</code> as the signing key.<a href="#section-7.1.2-2
 <div class="alignLeft art-text artwork" id="section-7.1.2-4">
 <pre>
 context = concat(token_type,
-                 token_key_id,
+                 request_key,
                  issuer_encap_key_id,
                  encode(2, len(encrypted_token_request)),
                  encrypted_token_request)
@@ -2846,14 +2845,12 @@ challenges when the origin is a web site to which the user navigated.<a href="#s
         </h3>
 <p id="section-9.3-1">Client activity could be linked if an Origin and Issuer collude to have unique keys targeted
 at specific Clients or sets of Clients.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
-<p id="section-9.3-2">As with the basic issuance protocol <span>[<a href="#ISSUANCE" class="xref">ISSUANCE</a>]</span>, the token_key_id is truncated to a single
-octet to mitigate the risk of unique keys per client.<a href="#section-9.3-2" class="pilcrow">¶</a></p>
-<p id="section-9.3-3">To mitigate the risk of a targeted Issuer Encapsulation Key, the Attester can observe and validate
+<p id="section-9.3-2">To mitigate the risk of a targeted Issuer Encapsulation Key, the Attester can observe and validate
 the issuer_encap_key_id presented by the Client to the Issuer. As described in <a href="#request-one" class="xref">Section 5.3</a>, Attesters
 MUST validate that the issuer_encap_key_id in the Client's TokenRequest matches a known Issuer
 Encapsulation Key public key for the Issuer. The Attester needs to support key rotation, but
 ought to disallow very rapid key changes, which could indicate that an Origin is colluding with
-an Issuer to try to rotate the key for each new Client in order to link the client activity.<a href="#section-9.3-3" class="pilcrow">¶</a></p>
+an Issuer to try to rotate the key for each new Client in order to link the client activity.<a href="#section-9.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="origin-identification">
@@ -2917,11 +2914,13 @@ identity (as known to the Attester) to the Origin, especially if repeated over m
         <h3 id="name-token-key-management">
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-token-key-management" class="section-name selfRef">Token Key Management</a>
         </h3>
-<p id="section-10.1-1">Issuers SHOULD generate new (Token Key, Issuer Origin Secret) values regularly, and
+<p id="section-10.1-1">Each Origin MUST be associated with a unique Token Key and Origin Secret pair in order
+to prevent tokens issued for one Origin from being redeemed to another Origin.
+Issuers SHOULD generate new (Token Key, Issuer Origin Secret) pairs regularly, and
 SHOULD maintain old and new secrets to allow for graceful updates. The RECOMMENDED
 rotation interval is two times the length of the policy window for that
-information. During generation, issuers must ensure the <code>token_key_id</code> (the 8-bit
-prefix of SHA256(Token Key)) is different from all other <code>token_key_id</code>
+information. During generation, issuers must ensure the <code>token_key_id</code> (the cryptographic
+hash digest of Token Key, i.e., SHA256(Token Key)) is different from all other <code>token_key_id</code>
 values for that Origin currently in rotation. One way to ensure this uniqueness
 is via rejection sampling, where a new key is generated until its <code>token_key_id</code> is
 unique among all currently in rotation for the Origin.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
@@ -3234,7 +3233,7 @@ represented as a hexadecimal string.<a href="#appendix-B.1-2.3" class="pilcrow">
 </li>
           <li class="normal" id="appendix-B.1-2.5">token_type: The type of the protocol specified in this document.<a href="#appendix-B.1-2.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-2.6">token_key_id: The ID of Token Key computed as in <a href="#request-one" class="xref">Section 5.3</a>, a single octet.<a href="#appendix-B.1-2.6" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-2.6">token_key_id: The ID of Token Key computed as in <a href="#request-one" class="xref">Section 5.3</a>, 32 bytes, represented as a hexadecimal string.<a href="#appendix-B.1-2.6" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.1-2.7">blinded_msg: A random blinded_msg value, represented as a hexadecimal string.<a href="#appendix-B.1-2.7" class="pilcrow">¶</a>
 </li>
