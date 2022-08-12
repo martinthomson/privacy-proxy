@@ -5,8 +5,8 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                Apple Inc.
 Intended status: Experimental                                D. Schinazi
-Expires: 7 January 2023                                       Google LLC
-                                                             6 July 2022
+Expires: 13 February 2023                                     Google LLC
+                                                          12 August 2022
 
 
                   The IP Geolocation HTTP Client Hint
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2023.
+   This Internet-Draft will expire on 13 February 2023.
 
 Copyright Notice
 
