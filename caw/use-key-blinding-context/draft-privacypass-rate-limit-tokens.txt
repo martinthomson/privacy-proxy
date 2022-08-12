@@ -1313,6 +1313,10 @@ authenticator = rsabssa_finalize(pkI, token_input, blind_sig, blind_inv)
    *  BKS-BlindPublicKey(pk, bk, ctx): Produce a blinded public key
       based on the input public key pk, blind key bk, and context ctx.
 
+   *  BKS-UnblindPublicKey(pk, bk, ctx): Produce an unblinded public key
+      based on the input blinded public key pk, blind bk, and context
+      ctx.
+
    *  BKS-Verify(pk, msg, sig): Verify signature sig over input message
       msg against the public key pk, producing a boolean value
       indicating success.
@@ -1479,7 +1483,8 @@ index_key = BKS-SerializePublicKey(evaluated_key)
    In pseudocode, this is as follows:
 
    evaluated_key = BKS-DeserializePublicKey(index_key)
-   unblinded_key = BKS-UnblindPublicKey(evaluated_key, sk_blind)
+   ctx = concat(encode(2, token_type)), "IssuerBlind")
+   unblinded_key = BKS-UnblindPublicKey(evaluated_key, sk_blind, ctx)
 
    index_result = BKS-SerializePublicKey(unblinded_key)
    pk_encoded = BKS-SerializePublicKey(pk_sign)
@@ -1782,6 +1787,10 @@ index_key = BKS-SerializePublicKey(evaluated_key)
       based on the input public key pk, blind bk, and context ctx
       according to [KEYBLINDING], Section 6.1.
 
+   *  BKS-UnblindPublicKey(pk, bk, ctx): Produce an unblinded public key
+      based on the input blinded public key pk, blind bk, and context
+      ctx according to [KEYBLINDING], Section 6.1.
+
    *  BKS-Verify(pk, msg, sig): Verify the DER-encoded [X690] BKS-Sig-
       Value signature sig over input message msg against the ECDSA
       public key pk, producing a boolean value indicating success.
@@ -1829,6 +1838,10 @@ index_key = BKS-SerializePublicKey(evaluated_key)
    *  BKS-BlindPublicKey(pk, bk, ctx): Produce a blinded public key
       based on the input public key pk, blind bk, and context ctx
       according to [KEYBLINDING], Section 5.1.
+
+   *  BKS-UnblindPublicKey(pk, bk, ctx): Produce an unblinded public key
+      based on the input blinded public key pk, blind bk, and context
+      ctx according to [KEYBLINDING], Section 5.1.
 
    *  BKS-Verify(pk, msg, sig): Verify the signature sig over input
       message msg against the Ed25519 public key pk, as defined in

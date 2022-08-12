@@ -2531,21 +2531,24 @@ following functions:<a href="#section-7-6" class="pilcrow">¶</a></p>
         <li class="normal" id="section-7-7.3">BKS-BlindPublicKey(pk, bk, ctx): Produce a blinded public key based on the input public
 key pk, blind key bk, and context ctx.<a href="#section-7-7.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-7.4">BKS-Verify(pk, msg, sig): Verify signature sig over input message msg against the
-public key pk, producing a boolean value indicating success.<a href="#section-7-7.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-7.4">BKS-UnblindPublicKey(pk, bk, ctx): Produce an unblinded public key based on the input
+blinded public key pk, blind bk, and context ctx.<a href="#section-7-7.4" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-7.5">BKS-BlindKeySign(sk_sign, sk_blind, ctx, msg): Sign input message msg with signing key sk_sign, blind
-key sk_blind, and context ctx and produce a signature of size <code>Nsig</code> bytes.<a href="#section-7-7.5" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-7.5">BKS-Verify(pk, msg, sig): Verify signature sig over input message msg against the
+public key pk, producing a boolean value indicating success.<a href="#section-7-7.5" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-7.6">BKS-SerializePrivatekey(sk): Serialize a private key to a byte string of length <code>Nsk</code>.<a href="#section-7-7.6" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-7.6">BKS-BlindKeySign(sk_sign, sk_blind, ctx, msg): Sign input message msg with signing key sk_sign, blind
+key sk_blind, and context ctx and produce a signature of size <code>Nsig</code> bytes.<a href="#section-7-7.6" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-7.7">BKS-DeserializePrivatekey(buf): Attempt to deserialize a private key from an <code>Nsk</code>-byte
-string buf. This function can fail if buf does not represent a valid private key.<a href="#section-7-7.7" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-7.7">BKS-SerializePrivatekey(sk): Serialize a private key to a byte string of length <code>Nsk</code>.<a href="#section-7-7.7" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-7.8">BKS-SerializePublicKey(pk): Serialize a public key to a byte string of length <code>Npk</code>.<a href="#section-7-7.8" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-7.8">BKS-DeserializePrivatekey(buf): Attempt to deserialize a private key from an <code>Nsk</code>-byte
+string buf. This function can fail if buf does not represent a valid private key.<a href="#section-7-7.8" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-7.9">BKS-DeserializePublicKey(buf): Attempt to deserialize a public key of length <code>Npk</code>.
-This function can fail if buf does not represent a valid public key.<a href="#section-7-7.9" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-7.9">BKS-SerializePublicKey(pk): Serialize a public key to a byte string of length <code>Npk</code>.<a href="#section-7-7.9" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-7-7.10">BKS-DeserializePublicKey(buf): Attempt to deserialize a public key of length <code>Npk</code>.
+This function can fail if buf does not represent a valid public key.<a href="#section-7-7.10" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="section-7-8">Additionally, each BKS scheme has a corresponding hash function, denoted <code>Hash</code>.
@@ -2717,7 +2720,8 @@ ASCII string "anon_issuer_origin_id" as the info string, yielding Anonymous Issu
 <div class="alignLeft art-text artwork" id="section-7.4-4">
 <pre>
 evaluated_key = BKS-DeserializePublicKey(index_key)
-unblinded_key = BKS-UnblindPublicKey(evaluated_key, sk_blind)
+ctx = concat(encode(2, token_type)), "IssuerBlind")
+unblinded_key = BKS-UnblindPublicKey(evaluated_key, sk_blind, ctx)
 
 index_result = BKS-SerializePublicKey(unblinded_key)
 pk_encoded = BKS-SerializePublicKey(pk_sign)
@@ -3044,30 +3048,33 @@ hash function.<a href="#section-11.1.1-1" class="pilcrow">¶</a></p>
             <li class="normal" id="section-11.1.1-2.3">BKS-BlindPublicKey(pk, bk, ctx): Produce a blinded public key based on the input public
 key pk, blind bk, and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>]</span>, Section 6.1.<a href="#section-11.1.1-2.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.1-2.4">BKS-Verify(pk, msg, sig): Verify the DER-encoded <span>[<a href="#X690" class="xref">X690</a>]</span> BKS-Sig-Value signature
-sig over input message msg against the ECDSA public key pk, producing a boolean value indicating success.<a href="#section-11.1.1-2.4" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.1-2.4">BKS-UnblindPublicKey(pk, bk, ctx): Produce an unblinded public key based on the input
+blinded public key pk, blind bk, and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>]</span>, Section 6.1.<a href="#section-11.1.1-2.4" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.1-2.5">BKS-BlindKeySign(sk_sign, sk_blind, ctx, msg): Sign input message msg with signing key sk_sign, blind sk_blind,
+            <li class="normal" id="section-11.1.1-2.5">BKS-Verify(pk, msg, sig): Verify the DER-encoded <span>[<a href="#X690" class="xref">X690</a>]</span> BKS-Sig-Value signature
+sig over input message msg against the ECDSA public key pk, producing a boolean value indicating success.<a href="#section-11.1.1-2.5" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-11.1.1-2.6">BKS-BlindKeySign(sk_sign, sk_blind, ctx, msg): Sign input message msg with signing key sk_sign, blind sk_blind,
 and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>]</span>, Section 6.2, and serializes the resulting signature
 pair (r, s) in "raw" form, i.e., as the concatenation of two 48-byte, big endian scalars,
-yielding an <code>Nsig=96</code> byte signature.<a href="#section-11.1.1-2.5" class="pilcrow">¶</a>
+yielding an <code>Nsig=96</code> byte signature.<a href="#section-11.1.1-2.6" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.1-2.6">BKS-SerializePrivatekey(sk): Serialize an ECDSA private key using the Field-Element-to-Octet-String
-conversion according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>.<a href="#section-11.1.1-2.6" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.1-2.7">BKS-SerializePrivatekey(sk): Serialize an ECDSA private key using the Field-Element-to-Octet-String
+conversion according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>.<a href="#section-11.1.1-2.7" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.1-2.7">BKS-DeserializePrivatekey(buf): Attempt to deserialize an ECDSA private key from a 48-byte
+            <li class="normal" id="section-11.1.1-2.8">BKS-DeserializePrivatekey(buf): Attempt to deserialize an ECDSA private key from a 48-byte
 string buf using Octet-String-to-Field-Element from <span>[<a href="#SECG" class="xref">SECG</a>]</span>. This function can fail if buf
-does not represent a valid private key.<a href="#section-11.1.1-2.7" class="pilcrow">¶</a>
+does not represent a valid private key.<a href="#section-11.1.1-2.8" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.1-2.8">BKS-SerializePublicKey(pk): Serialize an ECDSA public key using the
-compressed Elliptic-Curve-Point-to-Octet-String method according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>.<a href="#section-11.1.1-2.8" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.1-2.9">BKS-SerializePublicKey(pk): Serialize an ECDSA public key using the
+compressed Elliptic-Curve-Point-to-Octet-String method according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>.<a href="#section-11.1.1-2.9" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.1-2.9">BKS-DeserializePublicKey(buf): Attempt to deserialize a public key using
+            <li class="normal" id="section-11.1.1-2.10">BKS-DeserializePublicKey(buf): Attempt to deserialize a public key using
 the compressed Octet-String-to-Elliptic-Curve-Point method according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>,
 and then performs partial public-key validation as defined in section 5.6.2.3.4 of
 <span>[<a href="#KEYAGREEMENT" class="xref">KEYAGREEMENT</a>]</span>. This validation includes checking
 that the coordinates are in the correct range, that the point is on the curve, and
-that the point is not the point at infinity.<a href="#section-11.1.1-2.9" class="pilcrow">¶</a>
+that the point is not the point at infinity.<a href="#section-11.1.1-2.10" class="pilcrow">¶</a>
 </li>
           </ul>
 </section>
@@ -3090,20 +3097,23 @@ generation) and pk is computed according to <span>[<a href="#RFC8032" class="xre
             <li class="normal" id="section-11.1.2-2.3">BKS-BlindPublicKey(pk, bk, ctx): Produce a blinded public key based on the input public
 key pk, blind bk, and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-signature-key-blinding-02#section-5.1" class="relref">Section 5.1</a></span>.<a href="#section-11.1.2-2.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.2-2.4">BKS-Verify(pk, msg, sig): Verify the signature sig over input message msg against
+            <li class="normal" id="section-11.1.2-2.4">BKS-UnblindPublicKey(pk, bk, ctx): Produce an unblinded public key based on the input
+blinded public key pk, blind bk, and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>]</span>, Section 5.1.<a href="#section-11.1.2-2.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-11.1.2-2.5">BKS-Verify(pk, msg, sig): Verify the signature sig over input message msg against
 the Ed25519 public key pk, as defined in <span>[<a href="#RFC8032" class="xref">RFC8032</a>], <a href="https://rfc-editor.org/rfc/rfc8032#section-5.1.7" class="relref">Section 5.1.7</a></span>, producing a
-boolean value indicating success.<a href="#section-11.1.2-2.4" class="pilcrow">¶</a>
+boolean value indicating success.<a href="#section-11.1.2-2.5" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.2-2.5">BKS-BlindKeySign(sk_sign, sk_blind, ctx, msg): Sign input message msg with signing key sk_sign, blind
-sk_blind, and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-signature-key-blinding-02#section-5.2" class="relref">Section 5.2</a></span>, yielding an <code>Nsig=64</code> byte signature.<a href="#section-11.1.2-2.5" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.2-2.6">BKS-BlindKeySign(sk_sign, sk_blind, ctx, msg): Sign input message msg with signing key sk_sign, blind
+sk_blind, and context ctx according to <span>[<a href="#KEYBLINDING" class="xref">KEYBLINDING</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-signature-key-blinding-02#section-5.2" class="relref">Section 5.2</a></span>, yielding an <code>Nsig=64</code> byte signature.<a href="#section-11.1.2-2.6" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.2-2.6">BKS-SerializePrivatekey(sk): Identity function which outputs sk as an <code>Nsk=32</code> byte buffer.<a href="#section-11.1.2-2.6" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.2-2.7">BKS-SerializePrivatekey(sk): Identity function which outputs sk as an <code>Nsk=32</code> byte buffer.<a href="#section-11.1.2-2.7" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.2-2.7">BKS-DeserializePrivatekey(buf): Identity function which outputs buf interpreted as <code>sk</code>.<a href="#section-11.1.2-2.7" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.2-2.8">BKS-DeserializePrivatekey(buf): Identity function which outputs buf interpreted as <code>sk</code>.<a href="#section-11.1.2-2.8" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.2-2.8">BKS-SerializePublicKey(pk): Identity function which outputs pk as an <code>Npk=32</code> byte buffer.<a href="#section-11.1.2-2.8" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.2-2.9">BKS-SerializePublicKey(pk): Identity function which outputs pk as an <code>Npk=32</code> byte buffer.<a href="#section-11.1.2-2.9" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-11.1.2-2.9">BKS-DeserializePublicKey(buf): Identity function which outputs buf interpreted as <code>pk</code>.<a href="#section-11.1.2-2.9" class="pilcrow">¶</a>
+            <li class="normal" id="section-11.1.2-2.10">BKS-DeserializePublicKey(buf): Identity function which outputs buf interpreted as <code>pk</code>.<a href="#section-11.1.2-2.10" class="pilcrow">¶</a>
 </li>
           </ul>
 </section>
