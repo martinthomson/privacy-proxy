@@ -1483,7 +1483,7 @@ index_key = BKS-SerializePublicKey(evaluated_key)
    In pseudocode, this is as follows:
 
    evaluated_key = BKS-DeserializePublicKey(index_key)
-   ctx = concat(encode(2, token_type)), "IssuerBlind")
+   ctx = concat(encode(2, token_type)), "ClientBlind")
    unblinded_key = BKS-UnblindPublicKey(evaluated_key, sk_blind, ctx)
 
    index_result = BKS-SerializePublicKey(unblinded_key)
