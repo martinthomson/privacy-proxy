@@ -5,14 +5,14 @@
 Network Working Group                                     S. Hendrickson
 Internet-Draft                                                Google LLC
 Intended status: Informational                                J. Iyengar
-Expires: 9 February 2023                                          Fastly
+Expires: 13 February 2023                                         Fastly
                                                                 T. Pauly
                                                               Apple Inc.
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                           8 August 2022
+                                                          12 August 2022
 
 
                   Rate-Limited Token Issuance Protocol
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 February 2023.
+   This Internet-Draft will expire on 13 February 2023.
 
 Copyright Notice
 
@@ -1362,7 +1362,7 @@ encrypted_token_request = concat(enc, ct)
    In pseudocode, this is as follows:
 
    context = concat(token_type,
-                    token_key_id,
+                    request_key,
                     issuer_encap_key_id,
                     encode(2, len(encrypted_token_request)),
                     encrypted_token_request)
