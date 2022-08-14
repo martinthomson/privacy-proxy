@@ -1046,7 +1046,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Hendrickson, et al.</td>
-<td class="center">Expires 13 February 2023</td>
+<td class="center">Expires 15 February 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1059,12 +1059,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-privacypass-rate-limit-tokens-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-08-12" class="published">12 August 2022</time>
+<time datetime="2022-08-14" class="published">14 August 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-02-13">13 February 2023</time></dd>
+<dd class="expires"><time datetime="2023-02-15">15 February 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ from anonymous clients.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 February 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 February 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1727,11 +1727,9 @@ of derivation.<a href="#section-2-10.7" class="pilcrow">¶</a>
 For example, an Issuer URL might be https://issuer.example.net/token-request. This parameter
 uses resource media type "text/plain".<a href="#section-3-2.2" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-2.3">Issuer Public Key values: an Issuer Public Key for an issuance protocol.<a href="#section-3-2.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-3-2.4">Issuer Encapsulation Key: a <code>EncapsulationKey</code> structure as defined below to use when encapsulating
+        <li id="section-3-2.3">Issuer Encapsulation Key: a <code>EncapsulationKey</code> structure as defined below to use when encapsulating
 information, such as the origin name, to the Issuer in issuance requests. This parameter uses resource media type
-"application/issuer-encap-key". The Npk parameter corresponding to the HpkeKdfId can be found in <span>[<a href="#HPKE" class="xref">HPKE</a>]</span>.<a href="#section-3-2.4" class="pilcrow">¶</a>
+"application/issuer-encap-key". The Npk parameter corresponding to the HpkeKdfId can be found in <span>[<a href="#HPKE" class="xref">HPKE</a>]</span>.<a href="#section-3-2.3" class="pilcrow">¶</a>
 </li>
       </ol>
 <div class="alignLeft art-text artwork" id="section-3-3">
@@ -1770,65 +1768,32 @@ object whose field names and values are raw values and URLs for the parameters.<
             <td class="text-left" rowspan="1" colspan="1">Issuer Request URI resource URL as a JSON string</td>
           </tr>
           <tr>
-            <td class="text-left" rowspan="1" colspan="1">token-keys</td>
-            <td class="text-left" rowspan="1" colspan="1">List of Issuer Public Key values, each as JSON objects</td>
-          </tr>
-          <tr>
             <td class="text-left" rowspan="1" colspan="1">encap-keys</td>
             <td class="text-left" rowspan="1" colspan="1">List of Encapsulation Key values, each as a base64url encoded EncapsulationKey value</td>
           </tr>
         </tbody>
       </table>
-<p id="section-3-6">Each "token-keys" JSON object contains the following fields and corresponding raw values.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<table class="center" id="table-2">
-        <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
-<thead>
-          <tr>
-            <th class="text-left" rowspan="1" colspan="1">Field Name</th>
-            <th class="text-left" rowspan="1" colspan="1">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">token-type</td>
-            <td class="text-left" rowspan="1" colspan="1">Integer value of the Token Type, as defined in <a href="#iana-token-type" class="xref">Section 11.1</a>, as a JSON number</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">token-key</td>
-            <td class="text-left" rowspan="1" colspan="1">The base64url encoding of the public key for use with the issuance protocol, including padding, as a JSON string</td>
-          </tr>
-        </tbody>
-      </table>
-<p id="section-3-8">Issuers MAY advertise multiple token-keys for the same token-type to
-support key rotation. In this case, Issuers indicate preference for which
-token key to use based on the order of keys in the list, with preference
-given to keys earlier in the list. Likewise, Issuers MAY advertise multiple
-encap-keys to support key rotation, where the order of the keys in the
-list indicates preference as with token-keys.<a href="#section-3-8" class="pilcrow">¶</a></p>
-<p id="section-3-9">As an example, the Issuer's JSON directory could look like:<a href="#section-3-9" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-10">
+<p id="section-3-6">Issuers MAY advertise multiple encap-keys to support key rotation, where the order
+of the keys in the list indicates preference as with token-keys.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">As an example, the Issuer's JSON directory could look like:<a href="#section-3-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-8">
 <pre>
  {
     "issuer-token-window": 86400,
     "issuer-request-uri": "https://issuer.example.net/token-request",
     "encap-keys": [
       &lt;encoded EncapsulationKey&gt;
-    ],
-    "token-keys": [
-      {
-        "token-type": 3,
-        "token-key": "MI...AB",
-      },
-      {
-        "token-type": 3,
-        "token-key": "MI...AQ",
-      }
     ]
  }
-</pre><a href="#section-3-10" class="pilcrow">¶</a>
+</pre><a href="#section-3-8" class="pilcrow">¶</a>
 </div>
-<p id="section-3-11">Issuer directory resources have the media type "application/json"
-and are located at the well-known location /.well-known/token-issuer-directory.<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-9">Issuers MUST support at least one Token Key per origin. Issuers MAY support
+multiple Token Key values for the same Origin in order to support rotation.
+Origin configuration for Issuers is out of scope for this document, and so
+the mechanism by which Origins obtain their Token Key value is not specified
+here.<a href="#section-3-9" class="pilcrow">¶</a></p>
+<p id="section-3-10">Issuer directory resources have the media type "application/json"
+and are located at the well-known location /.well-known/token-issuer-directory.<a href="#section-3-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-challenge-requirements">
@@ -1910,8 +1875,8 @@ of the Origin that issued the token challenge. One or more names can be listed
 in the TokenChallenge.origin_info field. Rate-limited token issuance relies on the
 client selecting a single origin name from this list if multiple are present.<a href="#section-5.1.1-2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.1.1-2.2">Token Key, a blind signature public key corresponding to the Issuer
-identified by the TokenChallenge.issuer_name.<a href="#section-5.1.1-2.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.1.1-2.2">Token Key, a blind signature public key specific to the Origin. This key is owned by the
+Issuer identified by the TokenChallenge.issuer_name.<a href="#section-5.1.1-2.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-5.1.1-2.3">Issuer Encapsulation Key, a public key used to encrypt request information corresponding
 to the Issuer identified by TokenChallenge.issuer_name.<a href="#section-5.1.1-2.3" class="pilcrow">¶</a>
@@ -2088,13 +2053,16 @@ blinded_msg, blind_inv = rsabssa_blind(pkI, token_input)
 </div>
 <p id="section-5.3-8">The Client then uses Client Key to generate its one-time-use request public
 key <code>request_key</code> and blind <code>request_blind</code> as described in <a href="#client-anon-issuer-origin-id" class="xref">Section 7.1</a>.<a href="#section-5.3-8" class="pilcrow">¶</a></p>
-<p id="section-5.3-9">The Client then constructs a InnerTokenRequest value, denoted <code>origin_token_request</code>,
-combining <code>blinded_msg</code>,  <code>request_key</code>, and the origin name as follows:<a href="#section-5.3-9" class="pilcrow">¶</a></p>
+<p id="section-5.3-9">The Client then computes <code>token_key_id</code> as the least significant byte of the Token Key
+ID, where the Token Key ID is generated as SHA256(public_key) and public_key is a DER-encoded
+SubjectPublicKeyInfo object carrying Token Key. The Client then constructs a InnerTokenRequest
+value, denoted <code>origin_token_request</code>, combining <code>token_key_id</code>, <code>blinded_msg</code>, and a padded
+representation of the origin name as follows:<a href="#section-5.3-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-10">
 <pre>
 struct {
+  uint8_t token_key_id;
   uint8_t blinded_msg[Nk];
-  uint8_t request_key[Npk];
   uint8_t padded_origin_name&lt;0..2^16-1&gt;;
 } InnerTokenRequest;
 </pre><a href="#section-5.3-10" class="pilcrow">¶</a>
@@ -2110,7 +2078,7 @@ structure is based on the publicly verifiable token issuance path in
 <pre>
 struct {
    uint16_t token_type = 0x0003;
-   uint8_t token_key_id;
+   uint8_t request_key[Npk];
    uint8_t issuer_encap_key_id[32];
    uint8_t encrypted_token_request&lt;1..2^16-1&gt;;
    uint8_t request_signature[Nsig];
@@ -2121,9 +2089,7 @@ struct {
 <ul class="normal">
 <li class="normal" id="section-5.3-16.1">"token_type" is a 2-octet integer, which matches the type in the challenge.<a href="#section-5.3-16.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-5.3-16.2">"token_key_id" is the least significant byte of the Token Key key ID, which is
-generated as SHA256(public_key), where public_key is a DER-encoded SubjectPublicKeyInfo
-object carrying Token Key.<a href="#section-5.3-16.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.3-16.2">"request_key" is the request_key value generated above.<a href="#section-5.3-16.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-5.3-16.3">"issuer_encap_key_id" is a collision-resistant hash that identifies the Issuer
 Encryption Key, generated as SHA256(EncapsulationKey).<a href="#section-5.3-16.3" class="pilcrow">¶</a>
@@ -2138,10 +2104,9 @@ value, calculated as described in <a href="#encrypt-origin" class="xref">Section
 the Issuer, with the TokenRequest as the body. The media type for this request
 is "message/token-request". The Client includes the "Sec-Token-Origin" header,
 whose value is Anonymous Origin ID; the "Sec-Token-Client" header, whose value is
-Client Key; the "Sec-Token-Request-Blind" header, whose value is request_blind; and
-the "Sec-Token-Request-Key" header, whose value is <code>request_key</code>. The Client
-sends this request to the Attester's proxy URI. An example request is shown below,
-where the Issuer Name is "issuer.net" and the Attester URI template is
+Client Key; and the "Sec-Token-Request-Blind" header, whose value is request_blind.
+The Client sends this request to the Attester's proxy URI. An example request is
+shown below, where the Issuer Name is "issuer.net" and the Attester URI template is
 "https://attester.net/token-request{?issuer}"<a href="#section-5.3-17" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-18">
 <pre>
@@ -2156,7 +2121,6 @@ content-length = &lt;Length of TokenRequest&gt;
 sec-token-origin = Anonymous Origin ID
 sec-token-client = Client Key
 sec-token-request-blind = request_blind
-sec-token-request-key = request_key
 
 &lt;Bytes containing the TokenRequest&gt;
 </pre><a href="#section-5.3-18" class="pilcrow">¶</a>
@@ -2218,8 +2182,7 @@ compromise; see <a href="#sec-considerations" class="xref">Section 8</a> for add
 <ul class="normal">
 <li class="normal" id="section-5.4-5.1">The TokenRequest contains a supported token_type<a href="#section-5.4-5.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-5.4-5.2">The TokenRequest.token_key_id and TokenRequest.issuer_encap_key_id correspond to known
-Token Keys and Issuer Encapsulation Keys held by the Issuer.<a href="#section-5.4-5.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.4-5.2">The TokenRequest.issuer_encap_key_id correspond to known Issuer Encapsulation Keys held by the Issuer.<a href="#section-5.4-5.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-5.4-5.3">The TokenRequest.encrypted_token_request can be decrypted using the
 Issuer's private key (the private key associated with Issuer Encapsulation Key), and contains
@@ -2231,9 +2194,9 @@ policy if supported. If a cross-origin policy is not supported, this condition i
         </ul>
 <p id="section-5.4-6">If any of these conditions is not met, the Issuer MUST return an HTTP 400 error to the Attester,
 which will forward the error to the client.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
-<p id="section-5.4-7">The Issuer determines the correct Issuer Key by using the decrypted Origin Name value and
-TokenRequest.token_key_id. If there is no Token Key whose truncated key ID matches
-TokenRequest.token_key_id, the Issuer MUST return an HTTP 401 error to Attester, which will
+<p id="section-5.4-7">The Issuer determines the correct Issuer Key by using the decrypted Origin Name and
+InnerTokenRequest.token_key_id values. If there is no Token Key whose truncated key ID matches
+InnerTokenRequest.token_key_id, the Issuer MUST return an HTTP 401 error to Attester, which will
 forward the error to the client. The Attester learns that the client's view of the Origin key
 was invalid in the process.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
 </section>
@@ -2256,7 +2219,7 @@ index_key.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 blind_sig = rsabssa_blind_sign(skP, InnerTokenRequest.blinded_msg)
 </pre><a href="#section-5.5-3" class="pilcrow">¶</a>
 </div>
-<p id="section-5.5-4"><code>skP</code> is the private key corresponding to Token Key, known only to the Issuer.
+<p id="section-5.5-4"><code>skP</code> is the private key corresponding to the per-Origin Token Key, known only to the Issuer.
 The Issuer then encrypts <code>blind_sig</code> to the Client as described in <a href="#encap-issuer-to-client" class="xref">Section 6.2</a>,
 yielding <code>encrypted_token_response</code>.<a href="#section-5.5-4" class="pilcrow">¶</a></p>
 <p id="section-5.5-5">The Issuer generates an HTTP response with status code 200 whose body consists of
@@ -2386,13 +2349,14 @@ aad = concat(encode(1, keyID),
              encode(2, kdfID),
              encode(2, aeadID),
              encode(2, token_type),
-             encode(1, token_key_id),
+             encode(Npk, request_key),
              encode(32, issuer_encap_key_id))
 padded_origin_name = pad(origin_name)
-input = concat(encode(Nk, blinded_msg),
-               encode(49, request_key),
-               encode(len(padded_origin_name), padded_origin_name))
-ct = context.Seal(aad, input)
+inner_token_request_enc = concat(encode(1, token_key_id),
+                                 encode(Nk, blinded_msg),
+                                 encode(2, len(padded_origin_name)),
+                                 encode(len(padded_origin_name), padded_origin_name))
+ct = context.Seal(aad, inner_token_request_enc)
 encrypted_token_request = concat(enc, ct)
 </pre><a href="#section-6.1-10" class="pilcrow">¶</a>
 </div>
@@ -2408,14 +2372,14 @@ aad = concat(encode(1, keyID),
              encode(2, kdfID),
              encode(2, aeadID),
              encode(2, token_type),
-             encode(1, token_key_id),
+             encode(Npk, request_key),
              encode(32, issuer_encap_key_id))
 context = SetupBaseR(enc, skI, "TokenRequest")
-origin_token_request, error = context.Open(aad, ct)
+inner_token_request_enc, error = context.Open(aad, ct)
 </pre><a href="#section-6.1-12" class="pilcrow">¶</a>
 </div>
-<p id="section-6.1-13">The <code>InnerTokenRequest.blinded_msg</code> and <code>InnerTokenRequest.request_key</code> values, along
-with the unpadded <code>origin_name</code> value, are used by the Issuer as described in <a href="#request-two" class="xref">Section 5.4</a>.<a href="#section-6.1-13" class="pilcrow">¶</a></p>
+<p id="section-6.1-13">The <code>InnerTokenRequest.blinded_msg</code>, <code>InnerTokenRequest.token_key_id</code>, and unpadded <code>origin_name</code>
+values are used by the Issuer as described in <a href="#request-two" class="xref">Section 5.4</a>.<a href="#section-6.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encap-issuer-to-client">
@@ -2615,7 +2579,7 @@ Client Secret, <code>sk_sign</code> as the signing key.<a href="#section-7.1.2-2
 <div class="alignLeft art-text artwork" id="section-7.1.2-4">
 <pre>
 message = concat(token_type,
-                 token_key_id,
+                 request_key,
                  issuer_encap_key_id,
                  encode(2, len(encrypted_token_request)),
                  encrypted_token_request)
@@ -2965,14 +2929,14 @@ identity (as known to the Attester) to the Origin, especially if repeated over m
         <h3 id="name-token-key-management">
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-token-key-management" class="section-name selfRef">Token Key Management</a>
         </h3>
-<p id="section-10.1-1">Issuers SHOULD generate a new (Token Key, Issuer Origin Secret) regularly, and
+<p id="section-10.1-1">Issuers SHOULD generate new (Token Key, Issuer Origin Secret) values regularly, and
 SHOULD maintain old and new secrets to allow for graceful updates. The RECOMMENDED
 rotation interval is two times the length of the policy window for that
 information. During generation, issuers must ensure the <code>token_key_id</code> (the 8-bit
 prefix of SHA256(Token Key)) is different from all other <code>token_key_id</code>
-values for that origin currently in rotation. One way to ensure this uniqueness
+values for that Origin currently in rotation. One way to ensure this uniqueness
 is via rejection sampling, where a new key is generated until its <code>token_key_id</code> is
-unique among all currently in rotation for the origin.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+unique among all currently in rotation for the Origin.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2989,9 +2953,9 @@ unique among all currently in rotation for the origin.<a href="#section-10.1-1" 
         </h3>
 <p id="section-11.1-1">This document updates the "Token Type" Registry (<span>[<a href="#AUTHSCHEME" class="xref">AUTHSCHEME</a>]</span>) with the following value:<a href="#section-11.1-1" class="pilcrow">¶</a></p>
 <span id="name-token-types"></span><div id="aeadid-values">
-<table class="center" id="table-3">
+<table class="center" id="table-2">
           <caption>
-<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#table-2" class="selfRef">Table 2</a>:
 <a href="#name-token-types" class="selfRef">Token Types</a>
           </caption>
 <thead>
@@ -3139,8 +3103,6 @@ in the "Permanent Message Header Field Names" &lt;<span><a href="https://www.ian
     | Sec-Token-Client        |   http   |  std   | This document |
     +-------------------------+----------+--------+---------------+
     | Sec-Token-Request-Blind |   http   |  std   | This document |
-    +-------------------------+----------+--------+---------------+
-    | Sec-Token-Request-Key   |   http   |  std   | This document |
     +-------------------------+----------+--------+---------------+
     | Sec-Token-Limit         |   http   |  std   | This document |
     +-------------------------+----------+--------+---------------+
